@@ -10,7 +10,7 @@
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=85e3a2b784700813659ca3ae8da46d29&libraries=services"></script>
 <script>
-// 지도생성, 지도이동, 키워드로 장소검색(마커, 인포윈도우 포함되어있음)
+// 지도생성(지도이동 포함), 키워드로 장소검색(마커, 인포윈도우 포함되어있음)
 ////////////////////////지도 생성하기///////////////////////////////
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
@@ -26,30 +26,11 @@ function setCenter() {
     
     // 지도 중심을 이동 시킵니다
     map.setCenter(moveLatLon);
-}
-
-//////////////////////지도 이동시키기/////////////////////////////
-function panTo() {
-    // 이동할 위도 경도 위치를 생성합니다 
-    var moveLatLon = new kakao.maps.LatLng(33.450580, 126.574942);
-    
-    // 지도 중심을 부드럽게 이동시킵니다
-    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-    map.panTo(moveLatLon);            
-}        
+}    
 
 ////////////////////////키워드로 장소 검색하기///////////////////////
 // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = {
-        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };  
-
-// 지도를 생성합니다    
-var map = new kakao.maps.Map(mapContainer, mapOption); 
 
 // 장소 검색 객체를 생성합니다
 var ps = new kakao.maps.services.Places(); 
@@ -91,8 +72,6 @@ function displayMarker(place) {
         infowindow.open(map, marker);
     });
 }
-
-
 </script>
 </body>
 </html>
