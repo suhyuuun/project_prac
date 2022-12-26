@@ -1,3 +1,22 @@
+var query;
+var longitude;
+var latitude;
+function corrdinate(query, x, y){
+    if (query != ''){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data : {
+                'query' : query,
+                'longitude' : x,
+                'latitude' : y
+            },
+            url : 'detailPageMap.do',
+
+        });
+    }
+}
+
 // 이미지 지도에서 마커가 표시될 위치입니다 
 var markerPosition  = new kakao.maps.LatLng(33.450701, 126.570667); 
 
