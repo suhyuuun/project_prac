@@ -1,18 +1,18 @@
+//기본값 저장
+var x;
+var y;
 var query;
-var longitude;
-var latitude;
-function corrdinate(query, x, y){
+
+function coordinate(x,y){
     if (query != ''){
         $.ajax({
             type: 'POST',
-            dataType: 'json',
+            dataType : 'json',
             data : {
-                'query' : query,
-                'longitude' : x,
-                'latitude' : y
-            },
-            url : 'detailPageMap.do',
-
+                'x' : x,
+                'y' : y,
+                'query' : query
+            }
         });
     }
 }
