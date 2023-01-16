@@ -4,6 +4,9 @@ var pageNo;
 var totalPage;
 var num;
 var total;
+var urlParams = new URLSearchParams(location.search);
+var res_num = urlParams.get('res_num');
+
 
 function pageSearch(totalPage, total, blockSize, blockPage) {
 	displayPagination(totalPage, total, blockSize, blockPage);
@@ -131,7 +134,9 @@ function displayPlaces(search) {
 	var listEl = document.getElementById('placesList'), menuEl = document
 			.getElementById('menu_wrap'), fragment = document
 			.createDocumentFragment(), bounds = new daum.maps.LatLngBounds(), listStr = '';
-
+	
+	
+	
 	// 검색 결과 목록에 추가된 항목들을 제거합니다
 	removeAllChildNods(listEl);
 
@@ -144,6 +149,7 @@ function displayPlaces(search) {
 				search[i].latitude,
 				search[i].longitude), marker = addMarker(
 				placePosition, i), itemEl = getListItem(i, search[i], marker); // 검색
+				
 		// 결과
 		// 항목
 		// Element를
@@ -198,25 +204,38 @@ function displayPlaces(search) {
 
 // 검색결과 항목을 Element로 반환하는 함수입니다
 function getListItem(index, search, marker) {
+	$.ajax({
+	type:'POST',
+	dataType:'json',
+	data:{
+	'res_num' : res_num
+	},
+	url:'libmap.do',
+	success : function(result){
+	var resList = result.aList;
+	},
+	error : function(error){
+	alert(error);
+	}
+	});
 
-	var el = document.createElement('li'), itemStr = '<span class="markerbg marker_'
+	var el = document.createElement('li'),
+	itemStr = '<span class="markerbg marker_'
 			+ (index + 1)
 			+ '"></span>'
+			+ '<a href="detailpage.do?res_num=' + '${resList.res_num}' + '">' 
 			+ '<div class="info">'
-			+ '   <h5>'
-			+ search.mart + '</h5>';
+			+ '<h5>'
+			+ search.foodstore_id + '</h5>'
+	itemStr += '<span>' + search.address + '</span>';
+	
 
-	if (search.newAddress) {
-		itemStr += '<span>' + search.address + '</span>'
-				+ '<span class="jibun gray">' + search.address
-				+ '</span>';
-	} else {
-		itemStr += '<span>' + search.address + '</span>';
-	}
-
-	itemStr += '<span class="tel">' + search.p_num + '</span>'
+	itemStr += '<span class="tel">' +search.foodstroe_num  + '</span>'
+	itemStr += '<span class="typ">' +search.foodtype + '</span>'
+	itemStr += '<img src =' + `${search.img_url}` + ' enctype="multipart/form-data" width=100 style="float:right">'
 			+ '</div>';
-
+			+ '</a>';
+	
 	el.innerHTML = itemStr;
 	el.className = 'item';
 	return el;
@@ -224,13 +243,13 @@ function getListItem(index, search, marker) {
 
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addMarker(position, idx, title) {
-	var imageSrc = 'http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커
+	var imageSrc ='http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커
 	// 이미지
 	// url,
 	// 스프라이트
 	// 이미지를
 	// 씁니다
-	imageSize = new daum.maps.Size(36, 37), // 마커 이미지의 크기
+	imageSize = new daum.maps.Size(40, 40), // 마커 이미지의 크기
 	imgOptions = {
 		spriteSize : new daum.maps.Size(36, 691), // 스프라이트 이미지의 크기
 		spriteOrigin : new daum.maps.Point(0, (idx * 46) + 10), // 스프라이트 이미지 중
@@ -289,14 +308,16 @@ function displayPagination(totalPage, total, blocksize, pageNo) {
 
 }
 
+
 // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
 // 인포윈도우에 장소명을 표시합니다
 function displayInfowindow(marker, title, searchs) {
 
 	
-	var content = '<div class ="f_main"><div id="f_image">' + searchs.mart + '</div>'
-			+ '<div class="f_header">' + searchs.p_num
-			+ '</div>' + '<div id="f_date">' + searchs.area
+	var content = '<div class ="f_main"><div id="f_date">' + '<img src =' + `${searchs.img_url}` +' enctype="multipart/form-data" width=50 style="float:left">' +'</div>'
+			+ '<div class="f_header" style="text-align:right">' + searchs.foodstore_id
+			+ '</div>' + '<div id="f_date" style="text-align:right">' + searchs.foodstroe_num 
+			+ '</div>' + '<div id="f_date" style="text-align:right">' + searchs.foodtype
 			+ '</div>' + '<div id="f_number">'
 			+ searchs.address + '</div></div>'; 
 
